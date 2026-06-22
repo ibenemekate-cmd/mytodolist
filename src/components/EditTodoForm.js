@@ -7,7 +7,6 @@ export const EditTodoForm = ({editTask, task}) => {
     e.preventDefault();
     editTask(value, task.id);
 
-    
   }
     
   
