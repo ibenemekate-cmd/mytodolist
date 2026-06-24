@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from "react"
 import { TodoForm } from './TodoForm'
 import { v4 as uuidv4 } from 'uuid';
 import { Todo } from './Todo';
@@ -6,14 +6,40 @@ import { EditTodoForm } from './EditTodoForm';
 uuidv4();
 
 export const TodoWrapper = () => {
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState([]);
 
-  const addTodo = todo => {
-    setTodos([...todos, {id: uuidv4(), task: todo, completed: false, isEditing: false}])
-    console.log(todos)
-  }
+  useEffect(() => {
+    fetch("http://localhost:3001/todos")
+    .then((res) => res.json())
+    .then((data) => setTodos(data))
+    .catch((err) => console.error(err));
+  }, []);
+
+
+
+const addTodo = async (todo) => {
+  const response = await fetch("http://localhost:3001/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      task: todo,
+      completed: false,
+      isEditing: false,
+    }),
+  });
+
+  const newTodo = await response.json();
+  
+
+  setTodos([...todos, newTodo]);
+};
+  
   const toggleComplete = id => {
-    setTodos(todos.map(todo => todo.id === id ? {...todo, completed: todo.completed} :todo))
+    setTodos(todos.map(todo => todo.id === id ? 
+      {...todo, completed: 
+        todo.completed} :todo))
   }
 
   const deleteTodo =id => {
@@ -25,13 +51,32 @@ export const TodoWrapper = () => {
    
   }
 
-  const editTask = (task, id)=> {
-    setTodos(todos.map(
-      todo => todo.id === id? {...todo, task, isEditing: !todo.isEditing} : todo
+  const editTask = async (task, id) => {
+    const response = await fetch(
+      `http://localhost:3001/todos/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          task,
+        }),
+      }
+    );
+
+    const updatedTodo = await response.json();
+    setTodos(
+      todos.map((todo)=>
+        todo.id === id
+      ? {...updatedTodo, isEditing: false}: todo
+    ) 
+    
     )
 
-    )
   }
+
+  
  
 
  
@@ -48,7 +93,11 @@ export const TodoWrapper = () => {
       )
       
     ))}
+
+
+
+
     
     </div>
-  )
-}
+  );
+};

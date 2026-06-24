@@ -1,0 +1,29 @@
+{
+  "todos": [
+    {
+      "task": "cooking",
+      "completed": false,
+      "isEditing": false,
+      "id": "aharlSqrmxk"
+    },
+    {
+      "task": "washing",
+      "completed": false,
+      "isEditing": false,
+      "id": "PYOhL_noqRM"
+    },
+    {
+      "task": "eating",
+      "completed": false,
+      "isEditing": false,
+      "id": "Znh-vZLUTpo"
+    },
+    {
+      "task": "playing",
+      "completed": false,
+      "isEditing": false,
+      "id": "5QZ0qtapPAI"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
